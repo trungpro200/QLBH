@@ -1,16 +1,20 @@
 import React from "react";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
+import ModeToggle from "@/components/ModeToggle";
 
 function HomePage() {
   return (
     <div>
-      <SignedIn>
+      {/* <SignedIn>
         <UserButton></UserButton>
       </SignedIn>
 
       <SignedOut>
-        <SignInButton mode="modal"></SignInButton>
+        <SignInButton mode="modal">
+          <Button>Sign in</Button>
+        </SignInButton>
       </SignedOut>
+      <ModeToggle></ModeToggle> */}
     </div>
   );
 }
