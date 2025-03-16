@@ -10,7 +10,6 @@ function ModeToggle() {
   return (
     <Button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      variant={"outline"}
       size={"icon"}
     >
       <SunIcon className="h-5 w-5 transition-all dark:scale-0 dark:rotate-90"></SunIcon>
