@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
@@ -26,36 +27,55 @@ import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FormFieldWrapper } from "@/components/FormFieldWrapper";
 import { login } from "@/actions/login";
+import { loginFormSchema } from "./LoginForm";
+import { register } from "@/actions/register";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { FormSuccess } from "@/components/FormSuccess";
 import { FormError } from "@/components/FormError";
 
-export const loginFormSchema = z.object({
-  email: z.string(),
-  password: z.string(),
-});
+export const registerSchema = z
+  .object({
+    email: z.string().email({ message: "Invalid email" }),
+    username: z.string().min(8).max(30),
+    password: z.string().min(2, { message: "Enter your password." }),
+    password2: z.string().min(2, { message: "Retype your password." }),
+  })
+  .refine((data) => data.password === data.password2, {
+    message: "Password mismatch.",
+    path: ["password2"],
+  });
 
-export const LoginForm = () => {
-  const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState("");
+export const RegisterForm = () => {
   const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
+  const route = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  function onSubmit(values: z.infer<typeof registerSchema>) {
     setError("");
     setSuccess("");
     startTransition(() => {
-      login(values).then((res) => {
-        setSuccess(res.success);
-        setError(res.error);
+      register(values).then((data) => {
+        if (data?.error) {
+          setError(data.error);
+        }
+
+        if (data?.success) {
+          setSuccess(data.success);
+        }
       });
     });
   }
 
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm<z.infer<typeof registerSchema>>({
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
+      username: "",
       password: "",
+      password2: "",
     },
   });
 
@@ -63,52 +83,49 @@ export const LoginForm = () => {
     <div>
       <Card className="max-w-xl mx-auto">
         <CardHeader className="items-center">
-          <CardTitle className="text-3xl">Welcome back</CardTitle>
-          <CardDescription className="text-lg">Login to VChess</CardDescription>
+          <CardTitle>Welcome</CardTitle>
+          <CardDescription>Register to VChess</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <FormFieldWrapper
                 fieldName="email"
-                displayName="email or username"
                 form={form}
                 disabled={isPending}
-              ></FormFieldWrapper>
+              />
+              <FormFieldWrapper
+                fieldName="username"
+                form={form}
+                disabled={isPending}
+              />
               <FormFieldWrapper
                 fieldName="password"
                 form={form}
                 disabled={isPending}
               />
-              <FormDescription className="w-full flex justify-between">
-                <span>Don't have account?</span>
-                <span>
-                  <a href="/register">Register</a>
-                </span>
-              </FormDescription>
+              <FormFieldWrapper
+                fieldName="password2"
+                displayName="Comfirm your password: "
+                form={form}
+                placeholder="Comfirm password"
+                disabled={isPending}
+              />
+              <FormMessage />
+              <legend className="h-4"></legend>
               <Button
                 type="submit"
-                className="w-full"
-                size="lg"
+                size={"lg"}
+                className="w-full space-x-7"
                 disabled={isPending}
               >
-                Login
+                Sign Up
               </Button>
               <FormSuccess message={success} />
               <FormError message={error} />
             </form>
           </Form>
         </CardContent>
-        <CardFooter>
-          <div className="w-full flex gap-2">
-            <Button variant={"outline"} size={"lg"} className="w-full">
-              <FaGithub className="h-5 w-5" />
-            </Button>
-            <Button variant={"outline"} size={"lg"} className="w-full">
-              <FcGoogle className="h-5 w-5" />
-            </Button>
-          </div>
-        </CardFooter>
       </Card>
     </div>
   );

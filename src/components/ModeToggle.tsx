@@ -11,6 +11,7 @@ function ModeToggle() {
     <Button
       onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       size={"icon"}
+      variant={"secondary"}
     >
       <SunIcon className="h-5 w-5 transition-all dark:scale-0 dark:rotate-90"></SunIcon>
       <MoonIcon className="h-5 w-5 absolute scale-0 transition-all dark:scale-100 dark:rotate-0"></MoonIcon>

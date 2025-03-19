@@ -14,19 +14,35 @@ function capitalize(str: string) {
 
 interface FormWrapperInterface {
   fieldName: string;
+  displayName?: string;
   form: UseFormReturn<any>;
+  placeholder?: string;
+  disabled?: boolean;
 }
 
-export const FormFieldWrapper = ({ fieldName, form }: FormWrapperInterface) => {
+export const FormFieldWrapper = ({
+  fieldName,
+  form,
+  displayName = "",
+  placeholder = "",
+  disabled = false,
+}: FormWrapperInterface) => {
+  if (!displayName) {
+    displayName = fieldName;
+  }
   return (
     <FormField
       control={form.control}
       name={fieldName}
       render={({ field }) => (
         <FormItem>
-          <FormLabel>{capitalize(fieldName)}</FormLabel>
+          <FormLabel>{capitalize(displayName)}</FormLabel>
           <FormControl>
-            <Input placeholder={`Enter your ${fieldName}: `} {...field}/>
+            <Input
+              disabled={disabled}
+              placeholder={placeholder || `Enter your ${displayName}: `}
+              {...field}
+            />
           </FormControl>
           <FormMessage />
         </FormItem>

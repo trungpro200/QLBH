@@ -11,13 +11,13 @@ export const metadata: Metadata = {
   description: "Welcome to VChess",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-[100vh] w-[100vw] overflow-hidden dark:bg-black/15">
       <body className={inter.className}>
         <ThemeProvider
           attribute={"class"}
@@ -27,7 +27,7 @@ export default function RootLayout({
         >
           <div className="min-h-screen">
             <NavBar />
-            <main className="py-8 flex justify-center items-center max-h-screen h-screen p-10">
+            <main className="h-screen">
               {children}
             </main>
           </div>
