@@ -17,8 +17,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-[100vh] w-[100vw] overflow-hidden dark:bg-black/15">
-      <body className={inter.className}>
+    <html lang="en" className="h-[100vh] w-[100vw] overflow-hidden">
+      <body
+        className={
+          inter.className +
+          " bg-[url(/mainbg.avif)] bg-no-repeat bg-cover bg-center bg-transparent bg-opacity-20"
+        }
+      >
         <ThemeProvider
           attribute={"class"}
           defaultTheme="system"
@@ -26,10 +31,8 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <div className="min-h-screen">
-            <NavBar />
-            <main className="h-screen">
-              {children}
-            </main>
+            <NavBar></NavBar>
+            <main className="h-screen">{children}</main>
           </div>
         </ThemeProvider>
       </body>
