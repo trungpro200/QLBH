@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -8,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Calendar, Home, icons, Inbox, Search, Settings } from "lucide-react";
 import UsersTable from "./UsersTable";
@@ -16,40 +19,41 @@ import AddUser from "./AddUser";
 const items = [
   {
     title: "Users",
-    url: "#user",
+    id: "user",
     icon: Calendar,
   },
   {
     title: "Add user",
-    url: "#adduser",
+    id: "adduser",
     icon: icons.Plus,
   },
 ];
 
-export function AppSidebar() {
+interface SBinterface {
+  setMenu: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export function AppSidebar({ setMenu }: SBinterface) {
   return (
-    <>
-      <Sidebar>
-        <SidebarHeader />
-        <SidebarContent>
-          <SidebarGroup />
-          <SidebarGroupLabel>Users</SidebarGroupLabel>
-          <SidebarMenu>
-            {items.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url}>
-                    <item.icon />
-                    <span>{item.title}</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-          <SidebarGroup />
-        </SidebarContent>
-        <SidebarFooter />
-      </Sidebar>
-    </>
+    <Sidebar>
+      <SidebarHeader />
+      <SidebarContent>
+        <SidebarMenu>
+          {items.map((item) => (
+            <SidebarMenuItem key={item.id}>
+              <SidebarMenuButton
+                onClick={() => {
+                  setMenu(item.id);
+                }}
+              >
+                <item.icon></item.icon>
+                {item.title}
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarContent>
+      <SidebarFooter />
+    </Sidebar>
   );
 }

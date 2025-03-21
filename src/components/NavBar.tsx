@@ -8,7 +8,6 @@ import { SignInButton } from "@/auth/LoginButton";
 import ModeToggle from "./ModeToggle";
 import { usePathname } from "next/navigation";
 
-
 function NavBar() {
   const lg = (
     <SignInButton mode="redirect" className="pl-2">
@@ -17,7 +16,7 @@ function NavBar() {
   );
 
   const loc = usePathname();
-  if (loc == "/usersDB") {
+  if (loc.startsWith("/users")) {
     return <></>;
   }
 
